@@ -1,5 +1,5 @@
 image:
-  repository: your-ecr-repo
+  repository: 615299732970.dkr.ecr.us-east-1.amazonaws.com
   tag: ""
 replicaCount: 2
 resources:
