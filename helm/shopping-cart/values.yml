@@ -1,6 +1,6 @@
 image:
   repository: 615299732970.dkr.ecr.us-east-1.amazonaws.com
-  tag: ""
+  tag: "latest"
 replicaCount: 2
 resources:
   requests:
