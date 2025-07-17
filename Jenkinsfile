@@ -40,7 +40,7 @@ pipeline {
       steps {
         sh """
           echo "Logging in to ECR..."
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 615299732970.dkr.ecr.us-east-1.amazonaws.com
 
           echo "🐳 Building Docker image..."
           docker build -t $ECR_REPO:$IMAGE_TAG .
