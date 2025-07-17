@@ -5,7 +5,7 @@ pipeline {
     AWS_REGION = 'us-east-1'
     ECR_REPO   = '615299732970.dkr.ecr.us-east-1.amazonaws.com/cart/shopping-cart'
     CHART_NAME = 'shopping-cart'
-    GIT_BRANCH = ''      // Will be set dynamically
+    GIT_BRANCH = 'main'      // Will be set dynamically
     IMAGE_TAG  = ''      // Will be set dynamically
     NAMESPACE  = ''      // Will be set based on GIT_BRANCH
   }
