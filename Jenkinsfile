@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/shehuj/cicd_deploy_eks.git', branch: "${env.BRANCH_NAME}"
+        git url: 'https://github.com/shehuj/cicd_deploy_eks.git', branch: "main"
       }
     }
 
