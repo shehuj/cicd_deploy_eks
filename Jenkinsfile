@@ -1,40 +1,36 @@
 pipeline {
   agent any
-
   environment {
     AWS_REGION = 'us-east-1'
     ECR_REPO   = '615299732970.dkr.ecr.us-east-1.amazonaws.com/cart/shopping-cart'
     CHART_NAME = 'shopping-cart'
-    GIT_BRANCH = ''          // Will be set dynamically
-    IMAGE_TAG  = ''          // Will be set from Git commit hash
-    NAMESPACE  = ''          // Will be set based on GIT_BRANCH
   }
 
   stages {
     stage('Checkout') {
       steps {
-        script {
-          GIT_BRANCH = env.BRANCH_NAME ?: 'main'
-          git url: 'https://github.com/shehuj/cicd_deploy_eks.git', branch: GIT_BRANCH
-        }
+        git url: 'https://github.com/shehuj/cicd_deploy_eks.git', branch: "${env.BRANCH_NAME}"
       }
     }
 
     stage('Build & Test') {
       steps {
-        sh 'mvn clean package -DskipTests'
+        sh 'mvn clean package -DskipTests=false'
+      }
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+        }
       }
     }
 
     stage('Build & Push Docker Image to ECR') {
       steps {
         script {
-          IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-          NAMESPACE = (GIT_BRANCH == 'main') ? 'prod' : 'staging'
-
-          // Export them so they're accessible in the shell
-          env.IMAGE_TAG = IMAGE_TAG
-          env.NAMESPACE = NAMESPACE
+          def shortCommit = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+          def namespace = (env.BRANCH_NAME == 'main') ? 'prod' : 'staging'
+          env.IMAGE_TAG = shortCommit
+          env.NAMESPACE = namespace
 
           sh """
             echo "Logging in to ECR..."
@@ -69,7 +65,7 @@ pipeline {
             helm dependency update helm/$CHART_NAME
             helm lint helm/$CHART_NAME
 
-            echo "Rendering template (optional check)..."
+            echo "Rendering template (optional sanity check)..."
             helm template $CHART_NAME helm/$CHART_NAME \
               --namespace $NAMESPACE \
               --set image.repository=$ECR_REPO \
