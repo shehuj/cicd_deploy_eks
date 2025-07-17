@@ -17,12 +17,6 @@ pipeline {
       steps {
         sh 'mvn clean package -DskipTests'
       }
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml'
-        }
-      }
-    }
 
     stage('Build & Push Docker Image to ECR') {
       steps {
