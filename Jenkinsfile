@@ -6,8 +6,8 @@ pipeline {
     ECR_REPO   = '615299732970.dkr.ecr.us-east-1.amazonaws.com/cart/shopping-cart'
     CHART_NAME = 'shopping-cart'
     GIT_BRANCH = 'main'      // Will be set dynamically
-    IMAGE_TAG  = ''      // Will be set dynamically
-    NAMESPACE  = ''      // Will be set based on GIT_BRANCH
+    IMAGE_TAG  = 'latest'      // Will be set dynamically
+    NAMESPACE  = 'cart'      // Will be set based on GIT_BRANCH
   }
 
   stages {
